@@ -45,6 +45,13 @@ class PlayerTableViewCell: UITableViewCell {
 		stepper.isContinuous = true
 	}
 	
+	override func prepareForReuse() {
+		playerScore.text = "0"
+		stepper.value = 0
+		stepper.maximumValue = 10
+		stepper.minimumValue = -10
+	}
+	
 	//MARK: CONFIGURE
 	private func configureUI(){
 		guard let data = self.playerData else {return}
