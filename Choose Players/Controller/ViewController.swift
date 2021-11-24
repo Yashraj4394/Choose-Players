@@ -14,7 +14,6 @@ class ViewController: UIViewController {
 	@IBOutlet weak var selectedPlayersTableView: UITableView!
 	
 	//MARK: PROPERTIES
-	
 	private var playersData : [PlayerModel] = {
 		return [PlayerModel(name: "A", isSelected: false, score: 0),
 				  PlayerModel(name: "B", isSelected: false, score: 0),
@@ -36,8 +35,7 @@ class ViewController: UIViewController {
 		configureTableView()
 	}
 	
-	//MARK:- CONFIGURE
-	
+	//MARK: CONFIGURE
 	private func configureTableView(){
 		playerListTableView.delegate = self
 		playerListTableView.dataSource = self
@@ -57,15 +55,34 @@ class ViewController: UIViewController {
 				playersData.remove(at: i)
 			}
 		}
+		playersData.sort { value1, value12 in
+			return value1.name < value12.name
+		}
+		
+		selectedPlayers.sort { value1, value12 in
+			return value1.name < value12.name
+		}
 		playerListTableView.reloadData()
 		selectedPlayersTableView.reloadData()
 	}
 	
 	@IBAction func moveToLeft(_ sender: UIButton) {
+		for (i,x) in self.selectedPlayers.enumerated() {
+			if x.isSelected {
+				playersData.append(x)
+				selectedPlayers.remove(at: i)
+			}
+		}
+		playersData.sort { value1, value12 in
+			return value1.name < value12.name
+		}
 		
+		selectedPlayers.sort { value1, value12 in
+			return value1.name < value12.name
+		}
+		playerListTableView.reloadData()
+		selectedPlayersTableView.reloadData()
 	}
-	
-	//MARK: HELPERS
 }
 
 //MARK: TABLEVIEW DATASOURCE
@@ -107,6 +124,14 @@ extension ViewController: UITableViewDelegate {
 		} else if tableView == selectedPlayersTableView {
 			self.selectedPlayers[indexPath.row].isSelected = !self.selectedPlayers[indexPath.row].isSelected
 		}
+	}
+	
+	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//		if tableView == playerListTableView {
+//			self.playersData[indexPath.row].isSelected = !self.playersData[indexPath.row].isSelected
+//		} else if tableView == selectedPlayersTableView {
+//			self.selectedPlayers[indexPath.row].isSelected = !self.selectedPlayers[indexPath.row].isSelected
+//		}
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
