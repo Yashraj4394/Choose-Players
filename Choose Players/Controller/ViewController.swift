@@ -49,39 +49,57 @@ class ViewController: UIViewController {
 	
 	//MARK:- ACTIONS
 	@IBAction func moveToRightTapped(_ sender: UIButton) {
-		for (i,x) in self.playersData.enumerated() {
-			if x.isSelected {
-				selectedPlayers.append(x)
-				playersData.remove(at: i)
+		if playersData.count > 0 {
+			for (i,x) in self.playersData.enumerated() {
+				if x.isSelected {
+					selectedPlayers.append(x)
+					playersData.remove(at: i)
+				}
 			}
-		}
-		playersData.sort { value1, value12 in
-			return value1.name < value12.name
+			playersData.sort { value1, value12 in
+				return value1.name < value12.name
+			}
+			
+			selectedPlayers.sort { value1, value12 in
+				return value1.name < value12.name
+			}
+			
+			for (i,_) in selectedPlayers.enumerated() {
+				selectedPlayers[i].isSelected = false
+			}
+			playerListTableView.reloadData()
+			selectedPlayersTableView.reloadData()
+		} else {
+			print("players data : nothing selected")
 		}
 		
-		selectedPlayers.sort { value1, value12 in
-			return value1.name < value12.name
-		}
-		playerListTableView.reloadData()
-		selectedPlayersTableView.reloadData()
 	}
 	
 	@IBAction func moveToLeft(_ sender: UIButton) {
-		for (i,x) in self.selectedPlayers.enumerated() {
-			if x.isSelected {
-				playersData.append(x)
-				selectedPlayers.remove(at: i)
+		if selectedPlayers.count > 0 {
+			for (i,x) in self.selectedPlayers.enumerated() {
+				if x.isSelected {
+					playersData.append(x)
+					selectedPlayers.remove(at: i)
+				}
 			}
-		}
-		playersData.sort { value1, value12 in
-			return value1.name < value12.name
+			playersData.sort { value1, value12 in
+				return value1.name < value12.name
+			}
+			
+			selectedPlayers.sort { value1, value12 in
+				return value1.name < value12.name
+			}
+			
+			for (i,_) in playersData.enumerated() {
+				playersData[i].isSelected = false
+			}
+			playerListTableView.reloadData()
+			selectedPlayersTableView.reloadData()
+		} else {
+			print("selected players :nothing selected")
 		}
 		
-		selectedPlayers.sort { value1, value12 in
-			return value1.name < value12.name
-		}
-		playerListTableView.reloadData()
-		selectedPlayersTableView.reloadData()
 	}
 }
 
@@ -124,14 +142,6 @@ extension ViewController: UITableViewDelegate {
 		} else if tableView == selectedPlayersTableView {
 			self.selectedPlayers[indexPath.row].isSelected = !self.selectedPlayers[indexPath.row].isSelected
 		}
-	}
-	
-	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//		if tableView == playerListTableView {
-//			self.playersData[indexPath.row].isSelected = !self.playersData[indexPath.row].isSelected
-//		} else if tableView == selectedPlayersTableView {
-//			self.selectedPlayers[indexPath.row].isSelected = !self.selectedPlayers[indexPath.row].isSelected
-//		}
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
