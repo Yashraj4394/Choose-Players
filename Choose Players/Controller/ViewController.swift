@@ -139,8 +139,12 @@ extension ViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if tableView == playerListTableView {
 			self.playersData[indexPath.row].isSelected = !self.playersData[indexPath.row].isSelected
+			tableView.deselectRow(at: indexPath, animated: true)
+			tableView.reloadData()
 		} else if tableView == selectedPlayersTableView {
 			self.selectedPlayers[indexPath.row].isSelected = !self.selectedPlayers[indexPath.row].isSelected
+			tableView.deselectRow(at: indexPath, animated: true)
+			tableView.reloadData()
 		}
 	}
 	

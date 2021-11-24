@@ -50,6 +50,11 @@ class PlayerTableViewCell: UITableViewCell {
 		guard let data = self.playerData else {return}
 		playerName.text = data.name
 		playerScore.text = "\(data.score)"
+		if data.isSelected {
+			accessoryType = .checkmark
+		} else {
+			accessoryType = .none
+		}
 	}
 	
 	//MARK: ACTIONS
