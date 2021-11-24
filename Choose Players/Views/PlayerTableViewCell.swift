@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol PlayerTableViewCellDelegate: AnyObject {
+	func didUpdateScore(score: Double,index:Int)
+}
+
 class PlayerTableViewCell: UITableViewCell {
 	
 	//MARK: OUTLETS
@@ -14,16 +18,43 @@ class PlayerTableViewCell: UITableViewCell {
 	@IBOutlet weak var stepper: UIStepper!
 	@IBOutlet weak var playerScore: UILabel!
 	
+	var playerData: PlayerModel? {
+		didSet {
+			configureUI()
+		}
+	}
+	
 	//MARK: PROPERTIES
 	static let reuseIdentifier = "PlayerTableViewCell"
-
+	weak var delegate: PlayerTableViewCellDelegate?
+	
 	//MARK: LIFECYCLE
-    override func awakeFromNib() {
-        super.awakeFromNib()
-		 
-	 }
-    
+	override func awakeFromNib() {
+		super.awakeFromNib()
+		setupUI()
+	}
+	
+	//MARK: CONFIGURE
+	private func setupUI(){
+		selectionStyle = .blue
+		playerScore.text = nil
+		stepper.value = 0
+		stepper.maximumValue = 10
+		stepper.minimumValue = -10
+		stepper.autorepeat = true
+		stepper.isContinuous = true
+	}
+	
+	//MARK: CONFIGURE
+	private func configureUI(){
+		guard let data = self.playerData else {return}
+		playerName.text = data.name
+		playerScore.text = "\(data.score)"
+	}
+	
+	//MARK: ACTIONS
 	@IBAction func stepperTapped(_ sender: UIStepper) {
-		
+		guard let data = self.playerData else {return}
+		delegate?.didUpdateScore(score: data.score + sender.value, index: self.tag)
 	}
 }
